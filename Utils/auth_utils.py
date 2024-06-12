@@ -5,18 +5,12 @@ from datetime import datetime, timedelta
 import jwt
 from pymongo import MongoClient
 
-# # MongoDB connection details
-# MONGO_URI = "mongodb+srv://devarshigoswami97:AoKUNhswGnboFmWt@dayoff.c1bq6uj.mongodb.net/?retryWrites=true&w=majority"
-# MONGO_DB_NAME = "your_database_name"  # Replace with your MongoDB database name
-# MONGO_COLLECTION_NAME = "session"
-
 SECRET_KEY = 'secret_key'
 ALGORITHM = 'HS256'
 
-
-# # Connect to MongoDB
-# client = MongoClient(MONGO_URI)
-# db = client[MONGO_DB_NAME]
+# Connect to MongoDB
+client = MongoClient(os.environ.get('MONGO_URI'))
+db = client[os.environ.get('MONGO_DB_NAME')]  
 
 def validate_jwt_token(token):
     try:
