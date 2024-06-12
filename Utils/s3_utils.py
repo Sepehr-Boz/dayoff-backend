@@ -23,17 +23,18 @@ from botocore.exceptions import NoCredentialsError
 def upload_to_s3(bucket_name, file_name, file_data):
     try:
         # Initialize S3 client
-        s3 = boto3.client('s3',
-                          aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-                          aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
-                          region_name=os.getenv('AWS_REGION'))
-        
+        # s3 = boto3.client('s3',
+        #                   aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+        #                   aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
+        #                   region_name=os.getenv('AWS_REGION'))
+        s3 = boto3.client('s3')
         # Upload file to S3 bucket
         s3.upload_fileobj(file_data, bucket_name, file_name, ExtraArgs={'ContentType': 'image/jpeg'})
         
         # Return the URL of the uploaded file
-        return f"https://{bucket_name}.s3.{os.getenv('AWS_REGION')}.amazonaws.com/{file_name}"
-    
+        region_name = s3.meta.region_name  # Dynamically get the region of the S3 client
+        return f"https://{bucket_name}.s3.{region_name}.amazonaws.com/{file_name}"
+ 
     except NoCredentialsError:
         raise Exception("S3 credentials not available")
     
