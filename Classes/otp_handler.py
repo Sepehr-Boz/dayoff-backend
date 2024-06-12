@@ -30,7 +30,7 @@ class OtpHandler:
         subject = "OTP Verification"
         content = Content("text/plain", f"Hello {username}, your OTP is: {generated_otp}")
         mail = Mail(from_email, to_email, subject, content)
-
+        # Changed response format to match the API Gateway Lambda function response format
         try:
             response = sg.send(mail)
             if response.status_code == 202:
