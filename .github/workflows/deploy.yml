@@ -47,10 +47,12 @@ jobs:
       run: |
         aws s3 cp "dayoff-lambda.zip" "s3://dayoff-bucket/lambda/zipped_functions/dayoff-lambda.zip" --region us-east-1
 
-    - name: Apply Terraform
+    - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
       with:
         terraform_version: '1.0.0'
+
+    - name: Apply Terraform
       run: |
         cd terraform
         terraform init
