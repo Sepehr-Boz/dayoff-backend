@@ -22,7 +22,7 @@ def validate_jwt_token(token):
         return None  # Invalid token
 
 
-def generate_jwt_token(username,email):
+def generate_jwt_token(username,email,country, job):
     expiration_time = datetime.utcnow() + timedelta(hours=24)  # You may adjust the expiration time
     payload = {
         'sub': username,
