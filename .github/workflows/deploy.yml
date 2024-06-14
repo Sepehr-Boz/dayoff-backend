@@ -52,6 +52,11 @@ jobs:
       with:
         terraform_version: '1.0.0'
 
+    - name: Initialize Terraform
+      run: |
+        cd terraform
+        terraform init
+
     - name: Import Existing Lambda Function
       run: |
         cd terraform
@@ -63,5 +68,4 @@ jobs:
     - name: Apply Terraform
       run: |
         cd terraform
-        terraform init
         terraform apply -auto-approve -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
