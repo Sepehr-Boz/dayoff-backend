@@ -47,25 +47,36 @@ jobs:
       run: |
         aws s3 cp "dayoff-lambda.zip" "s3://dayoff-bucket/lambda/zipped_functions/dayoff-lambda.zip" --region us-east-1
 
-    - name: Setup Terraform
-      uses: hashicorp/setup-terraform@v1
-      with:
-        terraform_version: '1.0.0'
-
-    - name: Initialize Terraform
-      run: |
-        cd terraform
-        terraform init
-
-    - name: Import Existing Lambda Function
-      run: |
-        cd terraform
-        terraform import -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" aws_lambda_function.dayoff_lambda arn:aws:lambda:us-east-1:715139502280:function:dayoff
+    - name: Update Lambda Function Code
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
-    - name: Apply Terraform
       run: |
-        cd terraform
-        terraform apply -auto-approve -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+        aws lambda update-function-code \
+          --function-name dayoff \
+          --s3-bucket dayoff-bucket \
+          --s3-key lambda/zipped_functions/dayoff-lambda.zip \
+          --region us-east-1
+
+    # - name: Setup Terraform
+    #   uses: hashicorp/setup-terraform@v1
+    #   with:
+    #     terraform_version: '1.0.0'
+
+    # - name: Initialize Terraform
+    #   run: |
+    #     cd terraform
+    #     terraform init
+
+    # - name: Import Existing Lambda Function
+    #   run: |
+    #     cd terraform
+    #     terraform import -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" aws_lambda_function.dayoff_lambda arn:aws:lambda:us-east-1:715139502280:function:dayoff
+    #   env:
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+    # - name: Apply Terraform
+    #   run: |
+    #     cd terraform
+    #     terraform apply -auto-approve -var="aws_access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" -var="aws_secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}"
