@@ -8,7 +8,7 @@ variable "aws_access_key" {}
 variable "aws_secret_key" {}
 
 resource "aws_lambda_function" "dayoff_lambda" {
-  function_name = "arn:aws:lambda:us-east-1:715139502280:function:dayoff"
+  function_name = "dayoff"
   s3_bucket     = "dayoff-bucket"
   s3_key        = "lambda/zipped_functions/dayoff-lambda.zip"
   handler       = "main.handler"
